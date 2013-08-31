@@ -7,6 +7,20 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 
+/**
+ * Single ended priority queue implemented as a heap.
+ * 
+ * The Heap priority queue provides efficient O(1) time access to the first
+ * element in the queue. Elements can be inserted and removed from the queue in
+ * log(N) time. Many elements can be inserted at once with time bounded by O(N).
+ * Arbitrary elements may be removed if the position in the queue is tracked for
+ * each element. The first element can always be removed.
+ * 
+ * @author Allen Hubbe
+ * 
+ * @param <E>
+ *            - the type of elements held in this collection
+ */
 public class Heap<E> extends AbstractQueue<E> {
     final Comparator<E> cmp;
     final MutableInt<E> pos;

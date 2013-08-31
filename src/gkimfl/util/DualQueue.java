@@ -2,6 +2,18 @@ package gkimfl.util;
 
 import java.util.Iterator;
 
+/**
+ * Double ended queue based on a pair of single-ended queues.
+ * 
+ * If the component queues are priority queues with opposite ordering, The
+ * DualQueue provides a double ended priority queue implementation. The
+ * component queues may even be ordered independently for other applications.
+ * 
+ * @author Allen Hubbe
+ * 
+ * @param <E>
+ *            - the type of elements held in this collection
+ */
 public class DualQueue<E> extends AbstractDequeue<E> {
 
     final AbstractQueue<E> fore;
