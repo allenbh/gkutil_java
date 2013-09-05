@@ -1,21 +1,21 @@
 package gkimfl.util;
 
 public abstract class AbstractDequeue<E> extends AbstractQueue<E> {
-	@Override
-	public E peek() {
-		return peekFirst();
-	}
+    @Override
+    public E peek() {
+        return peekFirst();
+    }
 
-	abstract public E peekLast();
+    abstract public E peekLast();
 
-	abstract public E peekFirst();
+    abstract public E peekFirst();
 
-	@Override
-	public E poll() {
-		return pollFirst();
-	}
+    @Override
+    public E poll() {
+        return pollFirst();
+    }
 
-	abstract public E pollLast();
+    abstract public E pollLast();
 
-	abstract public E pollFirst();
+    abstract public E pollFirst();
 }
