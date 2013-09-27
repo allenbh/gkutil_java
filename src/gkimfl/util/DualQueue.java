@@ -61,6 +61,11 @@ public class DualQueue<E> extends AbstractDequeue<E> {
     }
 
     @Override
+    public boolean isEmpty() {
+        return fore.isEmpty();
+    }
+
+    @Override
     public int size() {
         return fore.size();
     }
@@ -70,5 +75,11 @@ public class DualQueue<E> extends AbstractDequeue<E> {
         fore.removeElem(e);
         back.removeElem(e);
         return true;
+    }
+    
+    @Override
+    public void clear() {
+        fore.clear();
+        back.clear();
     }
 }

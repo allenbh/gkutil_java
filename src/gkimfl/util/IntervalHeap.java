@@ -74,6 +74,14 @@ public class IntervalHeap<E> extends AbstractDequeue<E> {
     }
 
     /**
+     * Return true if the heap is empty.
+     */
+    @Override
+    public boolean isEmpty() {
+        return queue.isEmpty();
+    }
+
+    /**
      * Return an iterator for the elements. This iterator does not yield
      * elements in sorted order.
      */
@@ -95,7 +103,8 @@ public class IntervalHeap<E> extends AbstractDequeue<E> {
             queue.addAll(c);
             heapify();
             return true;
-        } else {
+        }
+        else {
             return super.addAll(c);
         }
     }
@@ -116,7 +125,8 @@ public class IntervalHeap<E> extends AbstractDequeue<E> {
             if (i + 1 < iBound && lessSwap(i + 1, i)) {
                 pushDownMax(i + 1);
             }
-        } else {
+        }
+        else {
             i = pullUpMax(i);
             if (lessSwap(i, i - 1)) {
                 pushDownMin(i - 1);
@@ -138,7 +148,7 @@ public class IntervalHeap<E> extends AbstractDequeue<E> {
      */
     @Override
     public E peekLast() {
-        if(queue.size() < 2) {
+        if (queue.size() < 2) {
             return queue.get(0);
         }
         return queue.get(1);
@@ -152,7 +162,8 @@ public class IntervalHeap<E> extends AbstractDequeue<E> {
         int iBound = queue.size() - 1;
         if (iBound < 1) {
             return queue.remove(0);
-        } else {
+        }
+        else {
             E e = queue.get(0);
             if (iBound > 0) {
                 queue.set(0, queue.remove(iBound));
@@ -173,11 +184,13 @@ public class IntervalHeap<E> extends AbstractDequeue<E> {
         int iBound = queue.size() - 1;
         if (iBound < 1) {
             return queue.remove(0);
-        } else {
+        }
+        else {
             E e = queue.get(1);
             if (iBound < 2) {
                 queue.remove(1);
-            } else {
+            }
+            else {
                 queue.set(1, queue.remove(iBound));
                 int i = pushDownMax(1);
                 if (lessSwap(i, i - 1)) {
@@ -211,7 +224,8 @@ public class IntervalHeap<E> extends AbstractDequeue<E> {
             if (i + 1 < iBound) {
                 lessSwap(i + 1, i);
                 pushDownMax(i + 1);
-            } else if (0 < i - 1) {
+            }
+            else if (0 < i - 1) {
                 lessSwap(i - 1, i);
             }
             pushDownMin(i);
