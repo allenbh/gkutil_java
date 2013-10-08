@@ -1,5 +1,6 @@
 package gkimfl.util;
 
+import java.util.Collection;
 import java.util.Iterator;
 
 /**
@@ -31,6 +32,13 @@ public class DualQueue<E> extends AbstractDequeue<E> {
         return true;
     }
 
+    @Override
+    public boolean addAll(Collection<? extends E> c) {
+        fore.addAll(c);
+        back.addAll(c);
+        return true;
+    }
+    
     @Override
     public E peekFirst() {
         return fore.peek();
