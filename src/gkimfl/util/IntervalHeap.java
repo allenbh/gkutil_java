@@ -127,9 +127,13 @@ public class IntervalHeap<E> extends AbstractDequeue<E> {
             }
         }
         else {
-            i = pullUpMax(i);
             if (lessSwap(i, i - 1)) {
-                pushDownMin(i - 1);
+                pullUpMin(i - 1);
+            }
+            pullUpMax(i);
+            if (lessSwap(i, i - 1)) {
+                pullUpMin(i - 1);
+                pullUpMax(i);
             }
         }
         return true;
