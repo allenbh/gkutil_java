@@ -118,13 +118,8 @@ public class IntervalHeap<E> extends AbstractDequeue<E> {
         int iBound = queue.size();
         int i = iBound - 1;
         if ((i & 1) == 0) {
-            if (0 < i && lessSwap(i - 1, i)) {
-                pullUpMax(i - 1);
-            }
-            i = pullUpMin(i);
-            if (i + 1 < iBound && lessSwap(i + 1, i)) {
-                pushDownMax(i + 1);
-            }
+            pullUpMax(i);
+            pullUpMin(i);
         }
         else {
             if (lessSwap(i, i - 1)) {
