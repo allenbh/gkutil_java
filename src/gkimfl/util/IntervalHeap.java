@@ -168,6 +168,8 @@ public class IntervalHeap<E> extends AbstractDequeue<E> {
                 queue.set(0, queue.remove(iBound));
                 int i = pushDownMin(0);
                 if (i + 1 < iBound && lessSwap(i + 1, i)) {
+                    // i is a leaf of the min heap
+                    assert ((i << 1) + 2 > iBound);
                     pullUpMax(i + 1);
                 }
             }
@@ -193,6 +195,8 @@ public class IntervalHeap<E> extends AbstractDequeue<E> {
                 queue.set(1, queue.remove(iBound));
                 int i = pushDownMax(1);
                 if (lessSwap(i, i - 1)) {
+                    // i is a leaf of the max heap
+                    assert ((i << 1) + 1 > iBound);
                     pullUpMin(i - 1);
                 }
             }
@@ -270,6 +274,9 @@ public class IntervalHeap<E> extends AbstractDequeue<E> {
         while (true) {
             int iDown = (i << 1) + 1;
             if (iBound <= iDown) {
+                // Element being pushed is former max of interval at iBound.
+                // As max of interval, guaranteed to be no less than iBound-1.
+                assert (iDown != iBound || !less(i, iBound - 1));
                 break;
             }
             int iRight = iDown + 2;
