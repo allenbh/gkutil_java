@@ -1,6 +1,7 @@
 package gkimfl.util;
 
 import static java.lang.Math.log;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -164,7 +165,10 @@ public class IntervalHeap<E> extends AbstractDequeue<E> {
             if (iBound > 0) {
                 queue.set(0, queue.remove(iBound));
                 int i = pushDownMin(0);
-                if (i + 1 < iBound && lessSwap(i + 1, i)) {
+                if (i + 1 == iBound) {
+                    pullUpMax(i);
+                }
+                else if (i + 1 < iBound && lessSwap(i + 1, i)) {
                     // i is a leaf of the min heap
                     assert ((i << 1) + 2 > iBound);
                     pullUpMax(i + 1);
@@ -191,7 +195,11 @@ public class IntervalHeap<E> extends AbstractDequeue<E> {
             else {
                 queue.set(1, queue.remove(iBound));
                 int i = pushDownMax(1);
-                if (lessSwap(i, i - 1)) {
+                if ((i & 1) == 0) {
+                    assert (i + 1 == iBound);
+                    pullUpMin(i);
+                }
+                else if (lessSwap(i, i - 1)) {
                     // i is a leaf of the max heap
                     assert ((i << 1) + 1 > iBound);
                     pullUpMin(i - 1);
@@ -219,16 +227,33 @@ public class IntervalHeap<E> extends AbstractDequeue<E> {
 
     private void heapify() {
         int iBound = queue.size();
-        int i = (iBound - 1) & ~1;
-        for (; 0 <= i; i -= 2) {
-            if (i + 1 < iBound) {
-                lessSwap(i + 1, i);
-                pushDownMax(i + 1);
+        for (int i = iBound - 1; 0 <= i; --i) {
+            if ((i & 1) == 0) {
+                int j = pushDownMin(i);
+                if (j + 1 == iBound) {
+                    pullUpMax(j, i + 1);
+                }
+                else if (j + 1 < iBound && lessSwap(j + 1, j)) {
+                    pullUpMin(j, i);
+                    pullUpMax(j + 1, i + 1);
+                }
             }
-            else if (0 < i - 1) {
-                lessSwap(i - 1, i);
+            else {
+                if (0 <= i - 1) {
+                    lessSwap(i, i - 1);
+                }
+                
+                int j = pushDownMax(i);
+                if ((j & 1) == 0) {
+                    assert (i < j);
+                    assert (j + 1 == iBound);
+                    pullUpMin(j, i + 1);
+                }
+                else if (i < j && lessSwap(j, j - 1)) {
+                    pullUpMax(j, i);
+                    pullUpMin(j - 1, i + 1);
+                }
             }
-            pushDownMin(i);
         }
     }
 
@@ -266,19 +291,48 @@ public class IntervalHeap<E> extends AbstractDequeue<E> {
         return i;
     }
 
+    private int pullUpMax(int i, int base) {
+        while (base < i) {
+            int iUp = ((i >> 1) - 1) | 1;
+            if (iUp < base || !lessSwap(iUp, i)) {
+                break;
+            }
+            i = iUp;
+        }
+        return i;
+    }
+
+    private int pullUpMin(int i, int base) {
+        while (base < i) {
+            int iUp = ((i >> 1) - 1) & ~1;
+            if (iUp < base || !lessSwap(i, iUp)) {
+                break;
+            }
+            i = iUp;
+        }
+        return i;
+    }
+
     private int pushDownMax(int i) {
         int iBound = queue.size();
         while (true) {
             int iDown = (i << 1) + 1;
-            if (iBound <= iDown) {
-                // Element being pushed is former max of interval at iBound.
-                // As max of interval, guaranteed to be no less than iBound-1.
-                assert (iDown != iBound || !less(i, iBound - 1));
+            if (iBound < iDown) {
                 break;
             }
-            int iRight = iDown + 2;
-            if (iRight < iBound && less(iDown, iRight)) {
-                iDown = iRight;
+            if (iDown == iBound) {
+                iDown = iBound - 1;
+            }
+            else {
+                int iRight = iDown + 2;
+                if (iRight <= iBound) {
+                    if (iRight == iBound) {
+                        iRight = iBound - 1;
+                    }
+                    if (less(iDown, iRight)) {
+                        iDown = iRight;
+                    }
+                }
             }
             if (!lessSwap(i, iDown)) {
                 break;

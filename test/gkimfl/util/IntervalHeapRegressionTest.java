@@ -2,6 +2,7 @@ package gkimfl.util;
 
 import static gkimfl.util.IntervalHeapTest.assertIsHeap;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import org.junit.Before;
@@ -109,4 +110,35 @@ public class IntervalHeapRegressionTest {
         heap.offer(60);
         assertIsHeap(heap);
     }
+
+    @Test
+    public final void testHeapify1() {
+        heap.addAll(Arrays.asList(new Integer[] {
+                92, 100, 71, 85, 47, 42, 85, 51, 41, 102, 53 }));
+        assertIsHeap(heap);
+    }
+
+    @Test
+    public final void testHeapify2() {
+        heap.addAll(Arrays.asList(new Integer[] {
+                42, 78, 63, 56, 187, 158, 164, 7, 135, 167, 47,
+                70, 89, 117, 105, 21, 121, 128, 145 }));
+        assertIsHeap(heap);
+    }
+
+    @Test
+    public final void testHeapify3() {
+        heap.addAll(Arrays.asList(new Integer[] {
+                113, 159, 4, 117, 41, 143, 16, 79, 7, 8, 92, 105,
+                64, 84, 17, 47, 117 }));
+        assertIsHeap(heap);
+    }
+
+    @Test
+    public final void testHeapify4() {
+        heap.addAll(Arrays.asList(new Integer[] {
+                146, 122, 130, 119, 64, 24, 106, 61, 85, 104, 138, 50, 12, 10, 32 }));
+        assertIsHeap(heap);
+    }
+
 }
