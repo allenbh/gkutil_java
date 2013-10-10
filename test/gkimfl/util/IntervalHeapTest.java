@@ -18,18 +18,46 @@ public class IntervalHeapTest {
         }));
     }
 
-    @Test
-    public final void testIsMaxHeap() {
-        for (int i = 3; i < heap.size(); i += 2) {
-            assertFalse(heap.queue.get(i) > heap.queue.get(((i >> 1) - 1) | 1));
+    public static void assertIsMaxHeap(IntervalHeap<Integer> h) {
+        for (int i = 3; i < h.size(); i += 2) {
+            int iUp = ((i >> 1) - 1) | 1;
+            int v = h.queue.get(i);
+            int vUp = h.queue.get(iUp);
+            assertFalse(v > vUp);
+        }
+        
+        // empty interval min leaf is also considered in the max heap
+        if ((h.size() & 1) == 1 && h.size() > 2) {
+            int i = h.size() - 1;
+            int iUp = ((i >> 1) - 1) | 1;
+            int v = h.queue.get(i);
+            int vUp = h.queue.get(iUp);
+            assertFalse(v > vUp);
         }
     }
 
-    @Test
-    public final void testIsMinHeap() {
-        for (int i = 2; i < heap.size(); i += 2) {
-            assertFalse(heap.queue.get(i) < heap.queue.get(((i >> 1) - 1) & ~1));
+    public static void assertIsMinHeap(IntervalHeap<Integer> h) {
+        for (int i = 2; i < h.size(); i += 2) {
+            int iUp = ((i >> 1) - 1) & ~1;
+            int v = h.queue.get(i);
+            int vUp = h.queue.get(iUp);
+            assertFalse(v < vUp);
         }
+    }
+
+    public static void assertIsInterval(IntervalHeap<Integer> h) {
+        for (int i = 0; i + 1 < h.size(); i += 2) {
+            int iSib = i + 1;
+            int v = h.queue.get(i);
+            int vSib = h.queue.get(iSib);
+            assertFalse(vSib < v);
+        }
+    }
+
+    public static void assertIsHeap(IntervalHeap<Integer> h) {
+        assertIsMaxHeap(h);
+        assertIsMinHeap(h);
+        assertIsInterval(h);
     }
 
     @Test
@@ -44,8 +72,7 @@ public class IntervalHeapTest {
         heap.offer(4);
         heap.offer(6);
         heap.offer(0);
-        testIsMaxHeap();
-        testIsMinHeap();
+        assertIsHeap(heap);
     }
 
     @Test
@@ -73,5 +100,4 @@ public class IntervalHeapTest {
         assertTrue(heap.pollLast() == 1);
         assertTrue(heap.pollLast() == 0);
     }
-
 }
