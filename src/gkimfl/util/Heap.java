@@ -3,7 +3,6 @@ package gkimfl.util;
 import static java.lang.Math.log;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -115,7 +114,8 @@ public class Heap<E> extends AbstractQueue<E> {
             queue.addAll(c);
             heapify();
             return true;
-        } else {
+        }
+        else {
             return super.addAll(c);
         }
     }
@@ -126,9 +126,11 @@ public class Heap<E> extends AbstractQueue<E> {
         int iBound = queue.size() - 1;
         if (iBound == 0) {
             queue.remove(0);
-        } else if (i == iBound) {
+        }
+        else if (i == iBound) {
             queue.remove(iBound);
-        } else {
+        }
+        else {
             queue.set(i, queue.remove(iBound));
             pos.set(queue.get(i), i);
             pushDown(pullUp(i));
@@ -139,7 +141,6 @@ public class Heap<E> extends AbstractQueue<E> {
     @Override
     public boolean offer(E e) {
         int i = queue.size();
-        pos.set(e, i);
         queue.add(e);
         pullUp(i);
         return true;
@@ -156,7 +157,8 @@ public class Heap<E> extends AbstractQueue<E> {
         int i = queue.size() - 1;
         if (i == 0) {
             queue.remove(0);
-        } else {
+        }
+        else {
             queue.set(0, queue.remove(i));
             pos.set(queue.get(0), 0);
             pushDown(0);
@@ -177,52 +179,57 @@ public class Heap<E> extends AbstractQueue<E> {
     private void heapify() {
         int i = queue.size() - 1;
         for (; 0 <= i; --i) {
-            pos.set(queue.get(i), i);
             pushDown(i);
         }
     }
 
-    private boolean less(int iMax, int iMin) {
-        return cmp.compare(queue.get(iMax), queue.get(iMin)) < 0;
-    }
-
-    private boolean lessSwap(int iMax, int iMin) {
-        if (less(iMax, iMin)) {
-            Collections.swap(queue, iMax, iMin);
-            pos.set(queue.get(iMax), iMax);
-            pos.set(queue.get(iMin), iMin);
-            return true;
-        }
-        return false;
+    private boolean less(E vA, E vB) {
+        return cmp.compare(vA, vB) < 0;
     }
 
     private int pullUp(int i) {
+        E v = queue.get(i);
         while (0 < i) {
             int iUp = (i - 1) >> 1;
-            if (!lessSwap(i, iUp)) {
+            E vUp = queue.get(iUp);
+            if (!less(v, vUp)) {
                 break;
             }
+            queue.set(i, vUp);
+            pos.set(vUp, i);
             i = iUp;
         }
+        queue.set(i, v);
+        pos.set(v, i);
         return i;
     }
 
     private int pushDown(int i) {
+        E v = queue.get(i);
         int iBound = queue.size();
         while (true) {
             int iDown = (i << 1) + 1;
             if (iBound <= iDown) {
                 break;
             }
+            E vDown = queue.get(iDown);
             int iRight = iDown + 1;
-            if (iRight < iBound && less(iRight, iDown)) {
-                iDown = iRight;
+            if (iRight < iBound) {
+                E vRight = queue.get(iRight);
+                if (less(vRight, vDown)) {
+                    vDown = vRight;
+                    iDown = iRight;
+                }
             }
-            if (!lessSwap(iDown, i)) {
+            if (!less(vDown, v)) {
                 break;
             }
+            queue.set(i, vDown);
+            pos.set(vDown, i);
             i = iDown;
         }
+        queue.set(i, v);
+        pos.set(v, i);
         return i;
     }
 }

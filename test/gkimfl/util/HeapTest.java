@@ -16,10 +16,15 @@ public class HeapTest {
 
         public TestItem(int value) {
             val = value;
+            pos = -1;
         }
 
         public int compareTo(TestItem o) {
-            return val - o.val;
+            return val > o.val ? +1 : val < o.val ? -1 : 0;
+        }
+
+        public String toString() {
+            return Integer.toString(val);
         }
 
         int val;
@@ -50,19 +55,37 @@ public class HeapTest {
                 new TestItemMutableInt());
     }
 
+    public static void assertIsMinHeap(Heap<TestItem> h) {
+        for (int i = 1; i < h.queue.size(); ++i) {
+            int iUp = (i - 1) >> 1;
+            TestItem v = h.queue.get(i);
+            TestItem vUp = h.queue.get(iUp);
+            if (h.cmp.compare(v, vUp) < 0) {
+                System.out.println(v + " < " + vUp);
+            }
+            assertFalse(h.cmp.compare(v, vUp) < 0);
+        }
+    }
+
+    public static void assertIsInPosition(Heap<TestItem> h) {
+        for (int i = 1; i < h.queue.size(); ++i) {
+            assertTrue(h.queue.get(i).pos == i);
+        }
+    }
+
+    public static void assertIsHeap(Heap<TestItem> h) {
+        assertIsMinHeap(h);
+        assertIsInPosition(h);
+    }
+
     @Test
     public void testIsMinHeap() {
-        for (int i = 1; i < heap.queue.size(); ++i) {
-            int iUp = (i - 1) >> 1;
-            assertFalse(heap.queue.get(i).compareTo(heap.queue.get(iUp)) < 0);
-        }
+        assertIsMinHeap(heap);
     }
 
     @Test
     public void testIsInPosition() {
-        for (int i = 1; i < heap.queue.size(); ++i) {
-            assertTrue(heap.queue.get(i).pos == i);
-        }
+        assertIsInPosition(heap);
     }
 
     @Test
@@ -98,12 +121,11 @@ public class HeapTest {
     public void testRemove() {
         ArrayList<TestItem> elements = new ArrayList<TestItem>(heap);
         Collections.shuffle(elements);
-        for(TestItem elem : elements) {
+        for (TestItem elem : elements) {
             heap.removeElem(elem);
             assertFalse(heap.contains(elem));
             testIsMinHeap();
             testIsInPosition();
         }
     }
-
 }
