@@ -1,12 +1,9 @@
 package gkimfl.util;
 
+import java.util.*;
+
 import static java.lang.Math.log;
 import static java.util.Collections.swap;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Iterator;
 
 /**
  * Double ended priority queue implemented as an interval heap.
@@ -29,10 +26,8 @@ import java.util.Iterator;
  *            - the type of elements held in this collection
  */
 public class IntervalHeap<E> extends AbstractDequeue<E> {
-
-    Comparator<E> cmp;
-
-    final ArrayList<E> queue;
+    private final Comparator<E> cmp;
+    List<E> queue;
 
     public IntervalHeap() {
         cmp = new NaturalComparator<E>();
