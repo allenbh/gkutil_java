@@ -1,9 +1,13 @@
 package gkimfl.util;
 
-import java.util.*;
-
 import static java.lang.Math.log;
 import static java.util.Collections.swap;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Double ended priority queue implemented as an interval heap.
