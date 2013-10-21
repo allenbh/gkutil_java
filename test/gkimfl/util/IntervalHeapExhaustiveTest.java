@@ -24,7 +24,7 @@ public class IntervalHeapExhaustiveTest {
 
     private boolean isHeap(int[] p, boolean min) {
         for (int i = 1; i < p.length; ++i) {
-            int parent = p[(i-1)/2];
+            int parent = p[(i - 1) / 2];
             if (min && (parent > p[i])) {
                 return false;
             }
@@ -45,21 +45,24 @@ public class IntervalHeapExhaustiveTest {
         int[] p;
         if (left == null) {
             p = new int[size];
-        } else {
+        }
+        else {
             p = Arrays.copyOf(left, size);
         }
         do {
             if (isHeap(p, (left == null))) {
                 if (left != null && left.length == size + 1) {
-                    int parent = p[(size-1)/2];
-                    if (parent < left[size]) continue;
+                    int parent = p[(size - 1) / 2];
+                    if (parent < left[size])
+                        continue;
                 }
                 heaps.add(Arrays.copyOf(p, size));
             }
-        } while(increment(p, valueBound, left));
+        } while (increment(p, valueBound, left));
         return heaps;
     }
 
+    @SuppressWarnings("unused")
     private String toString(int[] h) {
         List<Integer> a = new ArrayList<Integer>();
         for (int x : h) {
@@ -88,7 +91,7 @@ public class IntervalHeapExhaustiveTest {
     }
 
     private void testPermutations(int n, int sampleEachNth) {
-        List<int[]> minHeaps = generateHeaps(n, n - n/2, null);
+        List<int[]> minHeaps = generateHeaps(n, n - n / 2, null);
         int numHeaps = 0;
         Random r = new Random(7638481941L);
         for (int im = 0; im < minHeaps.size(); im++) {
@@ -104,10 +107,14 @@ public class IntervalHeapExhaustiveTest {
             for (int[] maxHeap : maxHeaps) {
                 int actualMin = Integer.MAX_VALUE;
                 int actualMax = Integer.MIN_VALUE;
-                for (int x : minHeap) actualMin = Math.min(actualMin, x);
-                for (int x : maxHeap) actualMin = Math.min(actualMin, x);
-                for (int x : minHeap) actualMax = Math.max(actualMax, x);
-                for (int x : maxHeap) actualMax = Math.max(actualMax, x);
+                for (int x : minHeap)
+                    actualMin = Math.min(actualMin, x);
+                for (int x : maxHeap)
+                    actualMin = Math.min(actualMin, x);
+                for (int x : minHeap)
+                    actualMax = Math.max(actualMax, x);
+                for (int x : maxHeap)
+                    actualMax = Math.max(actualMax, x);
 
                 if (sampleEachNth != -1 && r.nextInt() % sampleEachNth != 0) {
                     continue;
@@ -137,7 +144,7 @@ public class IntervalHeapExhaustiveTest {
     private IntervalHeap<Integer> asRawHeap(int n, int[] minHeap, int[] maxHeap) {
         List<Integer> heap = new ArrayList<Integer>();
         for (int j = 0; j < n; ++j) {
-            heap.add((j % 2 == 0) ? minHeap[j/2] : maxHeap[j/2]);
+            heap.add((j % 2 == 0) ? minHeap[j / 2] : maxHeap[j / 2]);
         }
         IntervalHeap<Integer> res = new IntervalHeap<Integer>();
         res.queue = heap;
